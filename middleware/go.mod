@@ -1,4 +1,4 @@
-module github.com/jessicalins/instrumentation-practices-examples
+module github.com/jessicalins/instrumentation-practices-examples/middleware
 
 go 1.19
 

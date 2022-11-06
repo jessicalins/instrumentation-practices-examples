@@ -1,12 +1,14 @@
 package main
 
 import (
+	"github.com/prometheus/client_golang/prometheus/collectors"
 	"log"
 	"net/http"
 
 	"github.com/prometheus/client_golang/prometheus"
-	"github.com/prometheus/client_golang/prometheus/collectors"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
+
+	"github.com/jessicalins/instrumentation-practices-examples/middleware/httpmiddleware"
 )
 
 func main() {
@@ -20,6 +22,14 @@ func main() {
 	)
 
 	// Expose /metrics HTTP endpoint using the created custom registry.
-	http.Handle("/metrics", promhttp.HandlerFor(registry, promhttp.HandlerOpts{Registry: registry}))
+	http.Handle(
+		"/metrics",
+		httpmiddleware.New(
+			registry, nil).
+			WrapHandler("/metrics", promhttp.HandlerFor(
+				registry,
+				promhttp.HandlerOpts{Registry: registry}),
+			))
+
 	log.Fatalln(http.ListenAndServe(":8080", nil))
 }
