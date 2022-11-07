@@ -20,6 +20,6 @@ func main() {
 	)
 
 	// Expose /metrics HTTP endpoint using the created custom registry.
-	http.Handle("/metrics", promhttp.HandlerFor(registry, promhttp.HandlerOpts{Registry: registry}))
+	http.Handle("/metrics", promhttp.HandlerFor(registry, promhttp.HandlerOpts{}))
 	log.Fatalln(http.ListenAndServe(":8080", nil))
 }
